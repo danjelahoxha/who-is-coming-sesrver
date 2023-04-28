@@ -25,9 +25,3 @@ Open a terminal (macOS, Linux) or Command Prompt (Windows).
 Run the command mongo to start the MongoDB CLI.
 Use commands like show dbs, use <database-name>, and db.<collection-name>.find() to view and manage your local MongoDB data.
 By following these steps, you can set up, view, and manage a MongoDB database locally.
-
-
-
-
-
-Regenerate response
