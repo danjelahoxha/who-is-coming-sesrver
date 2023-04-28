@@ -2,8 +2,12 @@ import { Module } from '@nestjs/common';
 import { MongooseModule } from '@nestjs/mongoose';
 import { AppController } from './app.controller';
 import { AppService } from './app.service';
+import { UserModule } from './modules/user.module';
+import { ScheduleModule } from './modules/schedule.module';
+import { WorkdayModule } from './modules/workday.module';
 
-MongooseModule.forRoot('mongodb://<username>:<password>@<hostname>:<port>/<database-name>?authSource=admin', {
+
+ MongooseModule.forRoot('mongodb://localhost:27017/whoiscoming', {
   useNewUrlParser: true,
   useUnifiedTopology: true,
   useFindAndModify: false,
@@ -11,7 +15,12 @@ MongooseModule.forRoot('mongodb://<username>:<password>@<hostname>:<port>/<datab
 })
 
 @Module({
-  imports: [],
+  imports: [
+    MongooseModule.forRoot('mongodb://localhost/whoiscomming'),
+    UserModule,
+    ScheduleModule,
+    WorkdayModule,
+  ],
   controllers: [AppController],
   providers: [AppService],
 })
