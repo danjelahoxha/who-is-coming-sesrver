@@ -3,7 +3,7 @@ import { ScheduleService } from '../services/schedule.service';
 import { Schedule } from '../schemas/schedule.schema';
 import { InjectModel } from '@nestjs/mongoose';
 import { Model, Types } from 'mongoose';
-import { CreateScheduleDto } from 'src/dto/CreateScheduleDto';
+
 
 @Controller('schedules')
 export class ScheduleController {
@@ -14,17 +14,45 @@ export class ScheduleController {
 
 
   @Post()
-  async create(@Body() createScheduleDto: CreateScheduleDto): Promise<Schedule> {
-    return this.scheduleService.create(createScheduleDto);
+  async create(@Body() schedule: Schedule): Promise<Schedule> {
+    return this.scheduleService.create(schedule);
   }
 
   @Get()
   async findAll(): Promise<any[]> {
-    return this.scheduleService.findAll();
+    return this.scheduleModel.aggregate([
+      {
+        $lookup: {
+          from: 'users',
+          localField: 'userId',
+          foreignField: '_id',
+          as: 'user',
+        },
+      },
+      {
+        $unwind: '$user',
+      },
+      {
+        $group: {
+          _id: '$workday',
+          schedules: {
+            $push: {
+              scheduleId: '$_id',
+              userId: '$userId',
+              user: '$user',
+            },
+          },
+        },
+      },
+      {
+        $project: {
+          _id: 0,
+          workday: '$_id',
+          schedules: 1,
+        },
+      },
+    ]).exec();
   }
-
-
-
   @Get(':id')
   async findOne(@Param('id') id: string): Promise<Schedule> {
     if (!Types.ObjectId.isValid(id)) {

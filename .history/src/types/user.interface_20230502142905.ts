@@ -5,5 +5,5 @@ export interface IUser extends Document {
     name: string
     email: string;
     favoritePeople: string[];
-    schedule: ISchedule[];
+    schedule: IWorkday[];
 }

@@ -20,9 +20,58 @@ export class ScheduleController {
 
   @Get()
   async findAll(): Promise<any[]> {
-    return this.scheduleService.findAll();
+    return this.scheduleModel.aggregate([
+      {
+        $unwind: '$userIds',
+      },
+      {
+        $lookup: {
+          from: 'users',
+          localField: 'userIds',
+          foreignField: '_id',
+          as: 'user',
+        },
+      },
+      {
+        $unwind: '$user',
+      },
+      {
+        $unwind: '$workdayIds',
+      },
+      {
+        $lookup: {
+          from: 'workdays',
+          localField: 'workdayIds',
+          foreignField: '_id',
+          as: 'workdayData',
+        },
+      },
+      {
+        $unwind: '$workdayData',
+      },
+      {
+        $group: {
+          _id: '$workdayIds',
+          workdayData: { $first: '$workdayData' },
+          users: {
+            $push: {
+              scheduleId: '$_id',
+              user: '$user',
+            },
+          },
+        },
+      },
+      {
+        $project: {
+          _id: 0,
+          workdayId: '$_id',
+          date: '$workdayData.date',
+          hours: '$workdayData.hours',
+          users: 1,
+        },
+      },
+    ]).exec();
   }
-
 
 
   @Get(':id')

@@ -1,29 +1,21 @@
 import { Controller, Get, Post, Body, Put, Param, Delete, BadRequestException } from '@nestjs/common';
 import { ScheduleService } from '../services/schedule.service';
 import { Schedule } from '../schemas/schedule.schema';
-import { InjectModel } from '@nestjs/mongoose';
-import { Model, Types } from 'mongoose';
-import { CreateScheduleDto } from 'src/dto/CreateScheduleDto';
+import { Types } from 'mongoose';
 
 @Controller('schedules')
 export class ScheduleController {
-  // constructor(private readonly scheduleService: ScheduleService) {}
-  constructor(private readonly scheduleService: ScheduleService,
-    @InjectModel(Schedule.name) private readonly scheduleModel: Model<Schedule>,
-  ) {}
-
+  constructor(private readonly scheduleService: ScheduleService) {}
 
   @Post()
-  async create(@Body() createScheduleDto: CreateScheduleDto): Promise<Schedule> {
-    return this.scheduleService.create(createScheduleDto);
+  async create(@Body() schedule: Schedule): Promise<Schedule> {
+    return this.scheduleService.create(schedule);
   }
 
   @Get()
-  async findAll(): Promise<any[]> {
+  async findAll(): Promise<Schedule[]> {
     return this.scheduleService.findAll();
   }
-
-
 
   @Get(':id')
   async findOne(@Param('id') id: string): Promise<Schedule> {
