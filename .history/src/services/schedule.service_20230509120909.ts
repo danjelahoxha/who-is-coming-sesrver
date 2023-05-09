@@ -1,6 +1,6 @@
 import { Injectable } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
-import { Model, Types } from 'mongoose';
+import { Model } from 'mongoose';
 import { Schedule, ScheduleDocument } from '../schemas/schedule.schema';
 import { CreateScheduleDto } from 'src/dto/CreateScheduleDto';
 
@@ -72,7 +72,7 @@ export class ScheduleService {
 
     return usersWithSchedules;
   }
-  async findByUserId(userId: string): Promise<any> {
+  async findByUserId(userId: Types.ObjectId): Promise<any> {
     const schedules = await this.scheduleModel
       .find({ userId })
       .populate('userId');

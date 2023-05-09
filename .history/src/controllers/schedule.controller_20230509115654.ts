@@ -44,12 +44,6 @@ export class ScheduleController {
     return { data: result };
   }
 
-  @Get('user/:userId')
-  async findByUserId(@Param('userId') userId: string): Promise<any> {
-    const result = await this.scheduleService.findByUserId(userId);
-    return { data: result };
-  }
-
   @Put(':id')
   async update(
     @Param('id') id: string,

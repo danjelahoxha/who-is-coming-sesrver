@@ -72,7 +72,7 @@ export class ScheduleService {
 
     return usersWithSchedules;
   }
-  async findByUserId(userId: string): Promise<any> {
+  async findByUserId(userId: Types.ObjectId): Promise<any> {
     const schedules = await this.scheduleModel
       .find({ userId })
       .populate('userId');

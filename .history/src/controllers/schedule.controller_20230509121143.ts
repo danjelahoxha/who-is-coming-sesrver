@@ -46,7 +46,9 @@ export class ScheduleController {
 
   @Get('user/:userId')
   async findByUserId(@Param('userId') userId: string): Promise<any> {
-    const result = await this.scheduleService.findByUserId(userId);
+    const result = await this.scheduleService.findByUserId(
+      Types.ObjectId.createFromHexString(userId),
+    );
     return { data: result };
   }
 

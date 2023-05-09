@@ -43,9 +43,10 @@ export class ScheduleController {
     const result = await this.scheduleService.findOne(day, month, year);
     return { data: result };
   }
-
   @Get('user/:userId')
-  async findByUserId(@Param('userId') userId: string): Promise<any> {
+  async findByUserId(
+    @Param('userId', new ParseObjectIdPipe()) userId: Types.ObjectId,
+  ): Promise<any> {
     const result = await this.scheduleService.findByUserId(userId);
     return { data: result };
   }

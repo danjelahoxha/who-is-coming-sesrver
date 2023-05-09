@@ -1,6 +1,6 @@
 import { Injectable } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
-import { Model, Types } from 'mongoose';
+import { Model } from 'mongoose';
 import { Schedule, ScheduleDocument } from '../schemas/schedule.schema';
 import { CreateScheduleDto } from 'src/dto/CreateScheduleDto';
 
@@ -71,23 +71,6 @@ export class ScheduleService {
     });
 
     return usersWithSchedules;
-  }
-  async findByUserId(userId: string): Promise<any> {
-    const schedules = await this.scheduleModel
-      .find({ userId })
-      .populate('userId');
-
-    const userSchedules = schedules.map((schedule) => {
-      return {
-        day: schedule.day,
-        month: schedule.month,
-        year: schedule.year,
-        startHour: schedule.startHour,
-        endHour: schedule.endHour,
-      };
-    });
-
-    return userSchedules;
   }
 
   async create(createScheduleDto: CreateScheduleDto): Promise<Schedule> {
