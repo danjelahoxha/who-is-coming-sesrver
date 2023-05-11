@@ -7,7 +7,6 @@ import {
   Param,
   Delete,
   Query,
-  NotFoundException,
 } from '@nestjs/common';
 import { ScheduleService } from '../services/schedule.service';
 import { Schedule } from '../schemas/schedule.schema';

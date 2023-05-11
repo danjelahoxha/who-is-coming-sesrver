@@ -6,13 +6,12 @@ import {
   Put,
   Param,
   Delete,
-  Query,
-  NotFoundException,
+  BadRequestException,
 } from '@nestjs/common';
 import { ScheduleService } from '../services/schedule.service';
 import { Schedule } from '../schemas/schedule.schema';
 import { InjectModel } from '@nestjs/mongoose';
-import { Model } from 'mongoose';
+import { Model, Types } from 'mongoose';
 import { CreateScheduleDto } from 'src/dto/CreateScheduleDto';
 
 @Controller('schedules')
@@ -60,23 +59,7 @@ export class ScheduleController {
   }
 
   @Delete(':userId/:day/:month/:year')
-  async deleteByUserIdAndDate(
-    @Param('userId') userId: string,
-    @Param('day') day: number,
-    @Param('month') month: number,
-    @Param('year') year: number,
-  ): Promise<Schedule> {
-    const deletedSchedule = await this.scheduleService.deleteByUserIdAndDate(
-      userId,
-      day,
-      month,
-      year,
-    );
-    if (!deletedSchedule) {
-      throw new NotFoundException(
-        `Schedule not found for user ${userId} on ${day}/${month}/${year}`,
-      );
-    }
-    return deletedSchedule;
+  async delete(@Param('userId') userId: string): Promise<Schedule> {
+    return this.scheduleService.delete(userId);
   }
 }

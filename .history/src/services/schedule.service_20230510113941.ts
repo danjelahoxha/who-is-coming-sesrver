@@ -107,8 +107,9 @@ export class ScheduleService {
     month: number,
     year: number,
   ): Promise<Schedule> {
-    const item = await this.scheduleModel.findOne({ day, month, year }).exec();
-    console.log(item);
+    console.log(
+      this.scheduleModel.findOneAndDelete({ userId, day, month, year }).exec(),
+    );
     const schedule = await this.scheduleModel
       .findOneAndDelete({ userId, day, month, year })
       .exec();

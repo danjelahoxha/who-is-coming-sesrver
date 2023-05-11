@@ -1,4 +1,4 @@
-import { Injectable, NotFoundException } from '@nestjs/common';
+import { Injectable } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
 import { Model, Types } from 'mongoose';
 import { Schedule, ScheduleDocument } from '../schemas/schedule.schema';
@@ -102,21 +102,13 @@ export class ScheduleService {
   }
 
   async deleteByUserIdAndDate(
-    userId: string,
+    userId: Types.ObjectId,
     day: number,
     month: number,
     year: number,
   ): Promise<Schedule> {
-    const item = await this.scheduleModel.findOne({ day, month, year }).exec();
-    console.log(item);
-    const schedule = await this.scheduleModel
+    return this.scheduleModel
       .findOneAndDelete({ userId, day, month, year })
       .exec();
-    if (!schedule) {
-      throw new NotFoundException(
-        `Schedule with userId ${userId} and date ${day}/${month}/${year} not found`,
-      );
-    }
-    return schedule;
   }
 }
